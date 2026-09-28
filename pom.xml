@@ -5,6 +5,10 @@
 	<groupId>za.co.sindi.json</groupId>
 	<artifactId>sindi-json-schema</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<name>Sindi JSCON Schema</name>
+	<description>A Jakarta EE utility that loads a JSON Schema and can validate the JSON value against the schema.</description>
+	<url>https://github.com/sinditech/sindi-json-schema</url>
 
 	<developers>
 		<developer>
@@ -29,7 +33,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/sinditech/sindi-json-schema.git</connection>
 		<developerConnection>scm:git:git@sinditech/sindi-json-schema.git</developerConnection>
-		<url>https://github.com/sinditech/sql2j</url>
+		<url>https://github.com/sinditech/sindi-json-schema</url>
 		<tag>HEAD</tag>
 	</scm>
 
