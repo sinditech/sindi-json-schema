@@ -5,6 +5,9 @@ package za.co.sindi.json.schema;
 
 import java.net.URI;
 
+import za.co.sindi.json.schema.dialect.Dialect;
+import za.co.sindi.json.schema.dialect.DialectRegistry;
+
 /**
  * Facade that most applications interact with.
  *
@@ -23,6 +26,10 @@ public final class JsonSchemaLoader {
 
     public JsonSchemaLoader(SchemaRegistry registry) {
         this.registry = registry;
+    }
+    
+    public JsonSchemaLoader(Dialect defaultDialect) {
+        this(new SchemaRegistry(SchemaSource.defaults(), DialectRegistry.defaults()));
     }
 
     public SchemaRegistry registry() {

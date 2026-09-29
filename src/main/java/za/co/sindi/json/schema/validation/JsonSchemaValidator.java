@@ -26,6 +26,7 @@ import za.co.sindi.json.schema.JsonSchema;
 import za.co.sindi.json.schema.ObjectSchema;
 import za.co.sindi.json.schema.SchemaType;
 import za.co.sindi.json.schema.SchemaVisitor;
+import za.co.sindi.json.schema.dialect.Dialect;
 
 /**
  * Validates JSON instances against {@link JsonSchema} trees.
@@ -110,11 +111,15 @@ public final class JsonSchemaValidator {
 
         @Override
         public Boolean visit(ObjectSchema schema, JsonValue instance, JsonPointer path) {
+            Dialect dialect = schema.dialect();
             boolean valid = true;
 
-            // 2020-12 semantics: $ref applies alongside its siblings.
             if (schema.ref() != null) {
                 valid = evaluate(schema.ref().resolve(), instance, path);
+                if (!dialect.appliesRefSiblings()) {
+                    // draft-07 and earlier: presence of $ref means every sibling is ignored.
+                    return valid;
+                }
             }
 
             ObjectSchema.GenericConstraints generic = schema.generic();
@@ -204,7 +209,7 @@ public final class JsonSchemaValidator {
                 error(path, schema, "String does not match pattern '" + c.pattern().pattern() + "'");
                 valid = false;
             }
-            if (c.format() != null) {
+            if (c.format() != null && schema.dialect().formatIsAssertion()) {
                 FormatValidator formatValidator = validator.formats.get(c.format());
                 if (formatValidator != null && !formatValidator.isValid(value)) {
                     error(path, schema, "String is not a valid '" + c.format() + "'");

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonPointer;
 import jakarta.json.JsonValue;
+import za.co.sindi.json.schema.dialect.Dialect;
 
 /**
  * An object schema: a bag of optional keywords.
@@ -26,6 +27,7 @@ import jakarta.json.JsonValue;
  */
 public record ObjectSchema(
         URI location,
+        Dialect dialect,
         JsonObject raw,
         SchemaRef ref,
         Metadata metadata,

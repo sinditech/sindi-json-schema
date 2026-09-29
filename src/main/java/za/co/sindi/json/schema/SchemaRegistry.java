@@ -17,6 +17,7 @@ import java.util.Set;
 import jakarta.json.Json;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
+import za.co.sindi.json.schema.dialect.DialectRegistry;
 
 /**
  * Central store of schema documents and their subschemas, keyed by canonical URI.
@@ -32,18 +33,20 @@ import jakarta.json.JsonValue;
 public final class SchemaRegistry {
 
     private final SchemaSource source;
+    private final DialectRegistry dialects;
 
     private final Map<URI, JsonSchema> schemas = new HashMap<>();
     private final Map<URI, JsonValue> documents = new HashMap<>();
     private final Set<URI> builtDocuments = new HashSet<>();
 
-    public SchemaRegistry(SchemaSource source) {
+    public SchemaRegistry(SchemaSource source, DialectRegistry dialects) {
         this.source = Objects.requireNonNull(source, "source");
+        this.dialects = Objects.requireNonNull(dialects, "dialects");
     }
 
     /** @return a registry that can fetch over HTTP(S) and from the file system. */
     public static SchemaRegistry withDefaultSource() {
-        return new SchemaRegistry(SchemaSource.defaults());
+        return new SchemaRegistry(SchemaSource.defaults(), DialectRegistry.defaults());
     }
 
     public SchemaSource source() {
@@ -72,7 +75,8 @@ public final class SchemaRegistry {
                     document = parse(source.fetch(documentUri));
                     documents.put(documentUri, document);
                 }
-                new SchemaReader(this, documentUri).read(document, documentUri, documentUri);
+                new SchemaReader(this, dialects, documentUri)
+                		.read(document, documentUri, dialects.defaultDialect(), JsonPointers.ROOT, JsonPointers.ROOT);
             } catch (RuntimeException | IOException e) {
                 builtDocuments.remove(documentUri);
                 if (e instanceof IOException ioe) throw new UncheckedIOException(ioe);
