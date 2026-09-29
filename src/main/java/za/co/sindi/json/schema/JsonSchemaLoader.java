@@ -7,6 +7,9 @@ import java.net.URI;
 
 import za.co.sindi.json.schema.dialect.Dialect;
 import za.co.sindi.json.schema.dialect.DialectRegistry;
+import za.co.sindi.json.schema.dialect.Draft04Dialect;
+import za.co.sindi.json.schema.dialect.Draft07Dialect;
+import za.co.sindi.json.schema.dialect.Draft202012Dialect;
 
 /**
  * Facade that most applications interact with.
@@ -29,7 +32,10 @@ public final class JsonSchemaLoader {
     }
     
     public JsonSchemaLoader(Dialect defaultDialect) {
-        this(new SchemaRegistry(SchemaSource.defaults(), DialectRegistry.defaults()));
+        this(new SchemaRegistry(SchemaSource.defaults(),
+                new DialectRegistry(defaultDialect).register(Draft04Dialect.INSTANCE)
+                .register(Draft07Dialect.INSTANCE)
+                .register(Draft202012Dialect.INSTANCE)));
     }
 
     public SchemaRegistry registry() {
