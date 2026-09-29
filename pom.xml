@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>za.co.sindi.json</groupId>
 	<artifactId>sindi-json-schema</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	
 	<name>Sindi JSCON Schema</name>
 	<description>A Jakarta EE utility that loads a JSON Schema and can validate the JSON value against the schema.</description>
